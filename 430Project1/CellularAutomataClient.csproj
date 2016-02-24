@@ -184,7 +184,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <UsingTask TaskName="INotifyMSBuildTask.WeavingInpcTask" AssemblyFile="C:\Users\Stephan\Documents\Visual Studio 2010\Projects\430Project1\430Project1\Libs\BuildTask\INotifyAttributeBuildTask.dll" />
+  <UsingTask TaskName="INotifyMSBuildTask.WeavingInpcTask" AssemblyFile="Libs\BuildTask\INotifyAttributeBuildTask.dll" />
   <Target Name="AfterBuild">
     <WeavingINPCTask SolutionDir="$(SolutionDir)" />
   </Target>
