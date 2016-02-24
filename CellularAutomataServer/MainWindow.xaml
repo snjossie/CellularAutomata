@@ -1,0 +1,24 @@
+﻿<Window x:Class="CellularAutomataServer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cellular Automata Server" Height="350" Width="525" Closing="Window_Closing" Loaded="Window_Loaded">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="taskbarItemInfo" />
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Button Content="Start Server" Margin="5" Width="80" Click="Start_Button_Click" Name="startButton" />
+        <Button Content="Stop Server" Margin="5" Width="80" Grid.Column="1" Click="Stop_Button_Click" Name="stopButton" />
+        <Button Content="Clear Log" Margin="5" Width="80" Grid.Column="3" Click="Clear_Button_Click" />
+        <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5" Grid.Row="1" Grid.ColumnSpan="4" Name="logWindow" />
+    </Grid>
+</Window>
