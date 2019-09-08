@@ -5,7 +5,7 @@ plugins {
 msbuild {
   solutionFile = 'Cellular Automata.sln'
  
-  targets = ['Clean', 'Rebuild']
+  targets = ['Clean', 'Restore', 'Rebuild']
 
   configuration = 'Release'
   msbuildDir = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin'
