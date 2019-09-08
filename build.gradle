@@ -3,7 +3,7 @@ plugins {
 }
  
 msbuild {
-  solutionFile = '430Project1.sln'
+  solutionFile = 'Cellular Automata.sln'
  
   targets = ['Clean', 'Rebuild']
 
