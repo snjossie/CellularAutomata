@@ -223,11 +223,11 @@ namespace CellularAutomataClient
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
         /// <param name="color">The color.</param>
-        private static unsafe void FillRectangle(int backBufferBase, int x, int y, int color)
+        private static unsafe void FillRectangle(IntPtr backBufferBase, int x, int y, int color)
         {
             const int PixelCellSize = CellSize * 4;
             backBufferBase += 4 + stride;
-            int buffer = backBufferBase + ((x * 4 * stride) + (y * 16));
+            long buffer = backBufferBase.ToInt64() + ((x * 4 * stride) + (y * 16));
             for (int i = 0; i < CellSize + 1; i++)
             {
                 for (int j = 0; j < PixelCellSize; j += 4)
@@ -235,7 +235,7 @@ namespace CellularAutomataClient
                     *((int*)(buffer + j)) = color;
                 }
 
-                buffer = backBufferBase + ((((x * 4) + i) * stride) + (y * 16));
+                buffer = backBufferBase.ToInt64() + ((((x * 4) + i) * stride) + (y * 16));
             }
         }
 
@@ -314,7 +314,7 @@ namespace CellularAutomataClient
             bmp.Lock();
             unsafe
             {
-                int buffer = (int)bmp.BackBuffer;
+                var buffer = bmp.BackBuffer;
 
                 Parallel.For(0, grid.Length, i =>
                 {

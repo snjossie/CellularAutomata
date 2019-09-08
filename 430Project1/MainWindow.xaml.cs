@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,7 @@ using CellularAutomataClient.RemoteServices;
 using ExceptionDialog.Wpf;
 using ICSharpCode.AvalonEdit.Folding;
 using Ionic.Zip;
+using JetBrains.Annotations;
 using Microsoft.Win32;
 
 namespace CellularAutomataClient
@@ -24,7 +26,6 @@ namespace CellularAutomataClient
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [INotify]
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         /// <summary>
@@ -87,6 +88,13 @@ namespace CellularAutomataClient
         /// </summary>
         private bool boardUploaded = false;
 
+        private int? runUntil;
+        private bool simulationRunning;
+        private int currentStep;
+        private double scale;
+        private StateConfiguration clearToState;
+        private bool isExpanded;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -141,17 +149,21 @@ namespace CellularAutomataClient
         }
 
         /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
         /// Gets or sets the value to run until.
         /// </summary>
         /// <value>
         /// The number of steps to run until. Can be <c>null</c>.
         /// </value>
-        public int? RunUntil { get; set; }
+        public int? RunUntil
+        {
+            get => runUntil;
+            set
+            {
+                if (value == runUntil) return;
+                runUntil = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulation is running.
@@ -159,7 +171,16 @@ namespace CellularAutomataClient
         /// <value>
         ///   <c>true</c> if the simulation is running; otherwise, <c>false</c>.
         /// </value>
-        public bool SimulationRunning { get; set; }
+        public bool SimulationRunning
+        {
+            get => simulationRunning;
+            set
+            {
+                if (value == simulationRunning) return;
+                simulationRunning = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the current step.
@@ -167,7 +188,16 @@ namespace CellularAutomataClient
         /// <value>
         /// The current step.
         /// </value>
-        public int CurrentStep { get; set; }
+        public int CurrentStep
+        {
+            get => currentStep;
+            set
+            {
+                if (value == currentStep) return;
+                currentStep = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the scale factor for zoom.
@@ -175,7 +205,16 @@ namespace CellularAutomataClient
         /// <value>
         /// The scale factor.
         /// </value>
-        public double Scale { get; set; }
+        public double Scale
+        {
+            get => scale;
+            set
+            {
+                if (value.Equals(scale)) return;
+                scale = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the clear-to-state.
@@ -183,7 +222,16 @@ namespace CellularAutomataClient
         /// <value>       
         /// The clear-to-state.
         /// </value>
-        public StateConfiguration ClearToState { get; set; }
+        public StateConfiguration ClearToState
+        {
+            get => clearToState;
+            set
+            {
+                if (Equals(value, clearToState)) return;
+                clearToState = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the compiler messages window is expanded.
@@ -191,7 +239,16 @@ namespace CellularAutomataClient
         /// <value>
         ///     <c>true</c> if compiler messages window is expanded; otherwise, <c>false</c>.
         /// </value>
-        public bool IsExpanded { get; set; }
+        public bool IsExpanded
+        {
+            get => isExpanded;
+            set
+            {
+                if (value == isExpanded) return;
+                isExpanded = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets the compilation errors.
@@ -307,14 +364,17 @@ namespace CellularAutomataClient
         /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         private void StateConfigurations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            ClearToBox.Items.Clear();
-            foreach (var item in bigGrid.StateConfigurations)
+            Dispatcher.InvokeIfRequired(() =>
             {
-                ComboBoxItem comboItem = new ComboBoxItem();
-                comboItem.Background = item.Color;
-                comboItem.Content = item.State;
-                ClearToBox.Items.Add(comboItem);
-            }
+                ClearToBox.Items.Clear();
+                foreach (var item in bigGrid.StateConfigurations)
+                {
+                    ComboBoxItem comboItem = new ComboBoxItem();
+                    comboItem.Background = item.Color;
+                    comboItem.Content = item.State;
+                    ClearToBox.Items.Add(comboItem);
+                }
+            });
         }
 
         /// <summary>
@@ -517,18 +577,6 @@ namespace CellularAutomataClient
                     writer.Write(" ");
                     writer.WriteLine(config.Color);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Called when a property changed.  Invokes the PropertyChanged event.
-        /// </summary>
-        /// <param name="property">The name of the property that changed.</param>
-        private void OnPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
         }
 
@@ -1016,7 +1064,19 @@ namespace CellularAutomataClient
         /// <param name="e">The <see cref="System.Windows.Controls.SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void ClearToBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ClearToState = bigGrid.StateConfigurations.SingleOrDefault(x => x.State == (byte)((ComboBoxItem)ClearToBox.SelectedItem).Content);
+            ClearToState = bigGrid.StateConfigurations.SingleOrDefault(x =>
+            {
+                var content = ((ComboBoxItem)ClearToBox.SelectedItem)?.Content;
+                return content != null && x.State == (byte) content;
+            });
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

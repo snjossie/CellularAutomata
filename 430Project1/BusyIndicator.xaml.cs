@@ -1,14 +1,14 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using JetBrains.Annotations;
 
 namespace CellularAutomataClient
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    [INotify]
     public partial class BusyIndicator : UserControl, INotifyPropertyChanged
     {
         /// <summary>
@@ -32,12 +32,7 @@ namespace CellularAutomataClient
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="BusyIndicator"/> is busy.
         /// </summary>
@@ -46,27 +41,21 @@ namespace CellularAutomataClient
         /// </value>
         public bool Busy
         {
-            get
-            {
-                return (bool)GetValue(BusyProperty);
-            }
+            get => (bool)GetValue(BusyProperty);
 
             set
             {
                 SetValue(BusyProperty, value);
+                OnPropertyChanged();
             }
         }
 
-        /// <summary>
-        /// Called when a property changed.  Invokes the PropertyChanged event.
-        /// </summary>
-        /// <param name="property">The name of the property that changed.</param>
-        public void OnPropertyChanged(String property)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

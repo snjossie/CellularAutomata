@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using JetBrains.Annotations;
 
 namespace CellularAutomataClient
 {
     /// <summary>
     /// Represents a possible state configuration in a cellular automaton.
     /// </summary>
-    [INotify]
     public class StateConfiguration : INotifyPropertyChanged
     {
         /// <summary>
@@ -19,6 +20,8 @@ namespace CellularAutomataClient
         /// The brush that will be used to paint with.
         /// </summary>
         private SolidColorBrush brush;
+
+        private byte state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StateConfiguration"/> class with a 
@@ -51,17 +54,21 @@ namespace CellularAutomataClient
         }
 
         /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
         /// Gets or sets the state.
         /// </summary>
         /// <value>
         /// The state.
         /// </value>
-        public byte State { get; set; }
+        public byte State
+        {
+            get => state;
+            set
+            {
+                if (value == state) return;
+                state = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the color.
@@ -80,58 +87,49 @@ namespace CellularAutomataClient
             {
                 brush = value;
                 brush.Freeze();
+                OnPropertyChanged();
             }
         }
 
-        /// <summary>
-        /// Called when a property changed.  Invokes the PropertyChanged event.
-        /// </summary>
-        /// <param name="property">The name of the property that changed.</param>
-        public void OnPropertyChanged(string property)
+        protected bool Equals(StateConfiguration other)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            return Equals(brush, other.brush) && state == other.state;
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-        /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-        /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || obj == this)
+            if (ReferenceEquals(null, obj))
             {
                 return false;
             }
 
-            if (obj is StateConfiguration)
+            if (ReferenceEquals(this, obj))
             {
-                var conf = obj as StateConfiguration;
-                return conf.Color == this.Color && conf.State == this.State;
+                return true;
             }
 
-            return base.Equals(obj);
+            return obj.GetType() == this.GetType() && Equals((StateConfiguration) obj);
         }
 
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-        /// </returns>
         public override int GetHashCode()
         {
-            return this.State.GetHashCode() ^ Color.GetHashCode() * 7;
+            unchecked
+            {
+                return ((brush != null ? brush.GetHashCode() : 0) * 397) ^ state.GetHashCode();
+            }
         }
 
         public override string ToString()
         {
             return this.State.ToString();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
