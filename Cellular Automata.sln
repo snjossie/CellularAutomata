@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellularAutomataClient", "CellularAutomataClient\CellularAutomataClient.csproj", "{04B49FA4-8A19-4709-B81F-2B934B9DCDE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellularAutomataLibrary", "CellularAutomataLibrary\CellularAutomataLibrary.csproj", "{9D01E69C-36CB-4D41-845C-4DF5B42356F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellularAutomataServer", "CellularAutomataServer\CellularAutomataServer.csproj", "{C2FB48CB-19DD-43A5-9C82-8A79391B41CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9570732B-DBB5-4CA2-AD8C-E38DB8C7A7FE}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		build.gradle = build.gradle
+		gradle\wrapper\gradle-wrapper.properties = gradle\wrapper\gradle-wrapper.properties
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MefInterfaces", "MefInterfaces\MefInterfaces.csproj", "{22193CB3-F63E-488F-96E2-9EDCA87B98F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04B49FA4-8A19-4709-B81F-2B934B9DCDE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04B49FA4-8A19-4709-B81F-2B934B9DCDE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04B49FA4-8A19-4709-B81F-2B934B9DCDE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04B49FA4-8A19-4709-B81F-2B934B9DCDE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D01E69C-36CB-4D41-845C-4DF5B42356F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D01E69C-36CB-4D41-845C-4DF5B42356F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D01E69C-36CB-4D41-845C-4DF5B42356F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D01E69C-36CB-4D41-845C-4DF5B42356F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2FB48CB-19DD-43A5-9C82-8A79391B41CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2FB48CB-19DD-43A5-9C82-8A79391B41CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2FB48CB-19DD-43A5-9C82-8A79391B41CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2FB48CB-19DD-43A5-9C82-8A79391B41CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22193CB3-F63E-488F-96E2-9EDCA87B98F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22193CB3-F63E-488F-96E2-9EDCA87B98F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22193CB3-F63E-488F-96E2-9EDCA87B98F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22193CB3-F63E-488F-96E2-9EDCA87B98F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D4C8F55-3132-4CD6-B0DD-1EAF9347F01A}
+	EndGlobalSection
+EndGlobal

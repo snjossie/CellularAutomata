@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="RemoteCompilation" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="Compile_TCP_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:8080/compile/meta?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8080/compile/meta?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8080/compile/meta?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/CellularAutomataLibrary" />
+      <xsd:import schemaLocation="http://localhost:8080/compile/meta?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:8080/compile/meta?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IRemoteCompilation_Compile_InputMessage">
+    <wsdl:part name="parameters" element="tns:Compile" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCompilation_Compile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCompilation_Initialize_InputMessage">
+    <wsdl:part name="parameters" element="tns:Initialize" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCompilation_Initialize_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InitializeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCompilation_Step_InputMessage">
+    <wsdl:part name="parameters" element="tns:Step" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCompilation_Step_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StepResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRemoteCompilation_Step_InvalidOperationFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/CellularAutomataLibrary" name="detail" element="q1:InvalidOperationFault" />
+  </wsdl:message>
+  <wsdl:portType name="IRemoteCompilation">
+    <wsdl:operation name="Compile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCompilation/Compile" message="tns:IRemoteCompilation_Compile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCompilation/CompileResponse" message="tns:IRemoteCompilation_Compile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Initialize">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCompilation/Initialize" message="tns:IRemoteCompilation_Initialize_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCompilation/InitializeResponse" message="tns:IRemoteCompilation_Initialize_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Step">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRemoteCompilation/Step" message="tns:IRemoteCompilation_Step_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRemoteCompilation/StepResponse" message="tns:IRemoteCompilation_Step_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRemoteCompilation/StepInvalidOperationFaultFault" name="InvalidOperationFaultFault" message="tns:IRemoteCompilation_Step_InvalidOperationFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Compile_TCP" type="tns:IRemoteCompilation">
+    <wsp:PolicyReference URI="#Compile_TCP_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Compile">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCompilation/Compile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Initialize">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCompilation/Initialize" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Step">
+      <soap12:operation soapAction="http://tempuri.org/IRemoteCompilation/Step" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="InvalidOperationFaultFault">
+        <soap12:fault use="literal" name="InvalidOperationFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RemoteCompilation">
+    <wsdl:port name="Compile_TCP" binding="tns:Compile_TCP">
+      <soap12:address location="net.tcp://localhost:8081/compile" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8081/compile</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
