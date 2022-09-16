@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,7 +9,6 @@ namespace CellularAutomataClient
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    [INotify]
     public partial class BusyIndicator : UserControl, INotifyPropertyChanged
     {
         /// <summary>
@@ -54,6 +54,7 @@ namespace CellularAutomataClient
             set
             {
                 SetValue(BusyProperty, value);
+                OnPropertyChanged();
             }
         }
 
@@ -61,7 +62,7 @@ namespace CellularAutomataClient
         /// Called when a property changed.  Invokes the PropertyChanged event.
         /// </summary>
         /// <param name="property">The name of the property that changed.</param>
-        public void OnPropertyChanged(String property)
+        public void OnPropertyChanged([CallerMemberNameAttribute] string property = null)
         {
             if (PropertyChanged != null)
             {

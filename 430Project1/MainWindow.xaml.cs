@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,7 +25,6 @@ namespace CellularAutomataClient
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [INotify]
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         /// <summary>
@@ -86,6 +86,13 @@ namespace CellularAutomataClient
         /// Indicates whether the board has been uploaded or needs to be uploaded again.
         /// </summary>
         private bool boardUploaded = false;
+        private int? _runUntil;
+        private bool _simulationRunning;
+        private int _currentStep;
+        private double _scale;
+        private StateConfiguration _clearToState;
+        private bool _isExpanded;
+        private ObservableCollection<ErrorLine> _compilationErrors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -151,7 +158,7 @@ namespace CellularAutomataClient
         /// <value>
         /// The number of steps to run until. Can be <c>null</c>.
         /// </value>
-        public int? RunUntil { get; set; }
+        public int? RunUntil { get => _runUntil; set { _runUntil = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulation is running.
@@ -159,7 +166,7 @@ namespace CellularAutomataClient
         /// <value>
         ///   <c>true</c> if the simulation is running; otherwise, <c>false</c>.
         /// </value>
-        public bool SimulationRunning { get; set; }
+        public bool SimulationRunning { get => _simulationRunning; set { _simulationRunning = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Gets or sets the current step.
@@ -167,7 +174,7 @@ namespace CellularAutomataClient
         /// <value>
         /// The current step.
         /// </value>
-        public int CurrentStep { get; set; }
+        public int CurrentStep { get => _currentStep; set { _currentStep = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Gets or sets the scale factor for zoom.
@@ -175,7 +182,7 @@ namespace CellularAutomataClient
         /// <value>
         /// The scale factor.
         /// </value>
-        public double Scale { get; set; }
+        public double Scale { get => _scale; set { _scale = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Gets or sets the clear-to-state.
@@ -183,7 +190,7 @@ namespace CellularAutomataClient
         /// <value>       
         /// The clear-to-state.
         /// </value>
-        public StateConfiguration ClearToState { get; set; }
+        public StateConfiguration ClearToState { get => _clearToState; set { _clearToState = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Gets or sets a value indicating whether the compiler messages window is expanded.
@@ -191,12 +198,12 @@ namespace CellularAutomataClient
         /// <value>
         ///     <c>true</c> if compiler messages window is expanded; otherwise, <c>false</c>.
         /// </value>
-        public bool IsExpanded { get; set; }
+        public bool IsExpanded { get => _isExpanded; set { _isExpanded = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Gets the compilation errors.
         /// </summary>
-        public ObservableCollection<ErrorLine> CompilationErrors { get; private set; }
+        public ObservableCollection<ErrorLine> CompilationErrors { get => _compilationErrors; private set { _compilationErrors = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// Loads the cellular automata definition.
@@ -524,7 +531,7 @@ namespace CellularAutomataClient
         /// Called when a property changed.  Invokes the PropertyChanged event.
         /// </summary>
         /// <param name="property">The name of the property that changed.</param>
-        private void OnPropertyChanged(string property)
+        private void OnPropertyChanged([CallerMemberNameAttribute] string property = null)
         {
             if (PropertyChanged != null)
             {

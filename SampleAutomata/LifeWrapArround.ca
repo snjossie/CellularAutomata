@@ -1,0 +1,56 @@
+using System;
+using System.Linq;
+using CellularAutomataLibrary;
+
+namespace Transition
+{
+    public static class TransitionFunc
+    {
+        public readonly static byte[] PossibleStates = new byte[] {0, 1};     	
+     
+        public static byte TransitionFunction(ToroidalArray board, int currentX, int currentY)
+        {
+        	int neighborCount = CountNeighbors(board, currentX, currentY);
+            
+            // Live cell
+            if(board[currentX, currentY] == 1) 
+	            switch(neighborCount)
+	            {
+	            	case 0:
+	            	case 1:
+	            		return 0; // Die, underpopulation
+	            	case 2:
+	            	case 3:
+	            		return 1; // Survive
+	            	default:
+	            		return 0; // Die, overcrowded
+	            }
+	        else if(neighborCount == 3)
+	        	return 1; // New!
+	        else
+	        	return 0; // Still not alive
+	        	
+        }
+        
+        private static int CountNeighbors(ToroidalArray board, int currentX, int currentY)
+        {
+        	int count = 0;
+        	
+        	for(int i = -1; i <= 1; i++)
+        	{
+        		for(int j = -1; j <= 1; j++)
+        		{
+        			if(i == j && i == 0)
+        				continue;
+        			//if(currentX + i < 0 || currentX + i >= board.Length ||
+        			//   currentY + j < 0 || currentY + j >= board.Length)
+        			//   	continue;
+        			if(board[currentX + i, currentY + j] == 1)
+						count++;        			
+        		}
+        	}
+        	
+        	return count;
+        }
+    }
+}

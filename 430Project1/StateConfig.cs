@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace CellularAutomataClient
@@ -7,7 +8,6 @@ namespace CellularAutomataClient
     /// <summary>
     /// Represents a possible state configuration in a cellular automaton.
     /// </summary>
-    [INotify]
     public class StateConfiguration : INotifyPropertyChanged
     {
         /// <summary>
@@ -19,6 +19,7 @@ namespace CellularAutomataClient
         /// The brush that will be used to paint with.
         /// </summary>
         private SolidColorBrush brush;
+        private byte _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StateConfiguration"/> class with a 
@@ -61,7 +62,14 @@ namespace CellularAutomataClient
         /// <value>
         /// The state.
         /// </value>
-        public byte State { get; set; }
+        public byte State
+        {
+            get => _state; set
+            {
+                _state = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the color.
@@ -80,6 +88,7 @@ namespace CellularAutomataClient
             {
                 brush = value;
                 brush.Freeze();
+                OnPropertyChanged();
             }
         }
 
@@ -87,7 +96,7 @@ namespace CellularAutomataClient
         /// Called when a property changed.  Invokes the PropertyChanged event.
         /// </summary>
         /// <param name="property">The name of the property that changed.</param>
-        public void OnPropertyChanged(string property)
+        public void OnPropertyChanged([CallerMemberNameAttribute] string property = null)
         {
             if (PropertyChanged != null)
             {

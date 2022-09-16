@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CellularAutomataClient</RootNamespace>
     <AssemblyName>CellularAutomataClient</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -160,9 +160,6 @@
     <Resource Include="Images\1381_cog.ico" />
     <Content Include="Libs\ExceptionDialog.dll" />
     <Content Include="Libs\ICSharpCode.AvalonEdit.dll" />
-    <Content Include="Libs\BuildTask\INotifyAttributeBuildTask.dll" />
-    <Content Include="Libs\BuildTask\Mono.Cecil.dll" />
-    <Content Include="Libs\BuildTask\Mono.Cecil.Pdb.dll" />
     <Content Include="Libs\Ionic.Zip.dll" />
     <None Include="Service References\RemoteServices\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
@@ -184,8 +181,4 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <UsingTask TaskName="INotifyMSBuildTask.WeavingInpcTask" AssemblyFile="Libs\BuildTask\INotifyAttributeBuildTask.dll" />
-  <Target Name="AfterBuild">
-    <WeavingINPCTask SolutionDir="$(SolutionDir)" />
-  </Target>
 </Project>

@@ -1,0 +1,58 @@
+using System;
+using System.Linq;
+using CellularAutomataLibrary;
+
+namespace Transition
+{
+	public class TransitionFunc : ITransition
+	{
+		private const byte Empty = 0;
+		private const byte Head = 1;
+		private const byte Tail = 2;
+		private const byte Conductor = 3;
+		
+		/*
+		 * ToroidalArray is a 2-D array that wraps in both the x and y directions.
+		 * The only property of the ToroidalArray that is of any significance 
+		 * is the 2-D indexer.  Example usage is shown below...
+		 * 
+		 * if(board[0, 1] == 1) { }
+		 */
+		public byte TransitionFunction(ToroidalArray board, int currentX, int currentY)
+		{
+			byte current = board[currentX, currentY];
+			
+			switch(current)
+			{
+				case Head:
+					return Tail;
+				case Tail:
+					return Conductor;
+				case Conductor:
+					return GetNextStateForConductor(board, currentX, currentY);
+				default:
+					return Empty;
+			}
+		}
+		
+		public static byte GetNextStateForConductor(ToroidalArray board, int currentX, int currentY)
+		{
+			int count = 0;
+			for (int i = -1; i <= 1; i++)
+			{
+				for (int j = -1; j <= 1; j++)
+				{
+					if (i == j && i == 0)
+						continue;
+					if (board[currentX + i, currentY + j] == Head)
+						count++;
+				}
+			}
+			
+			if(count == 1 || count == 2)
+				return Head;
+			else 
+				return Conductor;				
+		}
+	}
+}
